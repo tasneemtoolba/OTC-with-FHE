@@ -19,7 +19,7 @@ A demonstration frontend for confidential over-the-counter (OTC) trading using *
 - **Contract**: `ConfidentialOtcEscrow.sol`
 - **Address**: `0x7A333C2F8756F8fe7F341D1f590FC1A32199F4AD`
 - **Gateway**: `0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69`
-
+- **TokenAddress**: `0x5296968f6443608B719C142cbc4cC413e9B46F09`
 ### Frontend Components
 
 - **CreateOrder**: Form for makers to create new OTC orders
