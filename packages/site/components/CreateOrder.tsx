@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMetaMaskEthersSigner } from "@/hooks/metamask/useMetaMaskEthersSigner";
 import { useFhevm } from "@/fhevm/useFhevm";
 
@@ -6,30 +6,41 @@ type Props = {
     otcAddress: `0x${string}`;
     tokenIn: `0x${string}`;
     tokenOut: `0x${string}`;
-    onOrderCreated: (orderId: string) => void;
+    onOrderCreated?: (txHash: string) => void;
 };
 
 export default function CreateOrder({ otcAddress, tokenIn, tokenOut, onOrderCreated }: Props) {
-    const { ethersSigner, isConnected, connect, chainId } = useMetaMaskEthersSigner();
-    const { instance: fhevmInstance, status: fhevmStatus } = useFhevm({
+    const { ethersSigner, isConnected, connect, provider, chainId } = useMetaMaskEthersSigner();
+    const { instance: fhevmInstance, status: fhevmStatus, error: fhevmError } = useFhevm({
+        provider,
         chainId,
-        enabled: !!ethersSigner
+        enabled: !!provider
     });
 
+    // Form state
     const [userTokenIn, setUserTokenIn] = useState<string>(tokenIn);
     const [userTokenOut, setUserTokenOut] = useState<string>(tokenOut);
     const [amountIn, setAmountIn] = useState<string>("150000");
     const [amountOut, setAmountOut] = useState<string>("100000");
-    const [takerAddr, setTakerAddr] = useState<string>("0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69");
+    const [takerAddr, setTakerAddr] = useState<string>("0x0000000000000000000000000000000000000000");
     const [deadline, setDeadline] = useState<number>(Math.floor(Date.now() / 1000) + 86400);
-    const [doTransferOut, setDoTransferOut] = useState<boolean>(true);
+    const [doTransferOut, setDoTransferOut] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
+
+    // Update error state if FHEVM has an error
+    useEffect(() => {
+        if (fhevmError) {
+            setError(`FHEVM Error: ${fhevmError.message}`);
+        }
+    }, [fhevmError]);
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
         if (!fhevmInstance || !ethersSigner) return;
         setLoading(true);
+        setError("");
         setSuccess("");
 
         try {
@@ -130,6 +141,24 @@ export default function CreateOrder({ otcAddress, tokenIn, tokenOut, onOrderCrea
                         className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
                     >
                         Connect MetaMask
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="p-8">
+                <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-md mx-auto">
+                    <div className="text-red-600 text-2xl mb-2">⚠️</div>
+                    <h3 className="text-lg font-semibold text-red-800 mb-2">Error</h3>
+                    <p className="text-red-700 text-sm mb-4">{error}</p>
+                    <button
+                        onClick={() => setError("")}
+                        className="text-red-600 hover:text-red-800 text-sm underline"
+                    >
+                        Try again
                     </button>
                 </div>
             </div>
