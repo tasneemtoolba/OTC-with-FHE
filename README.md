@@ -52,6 +52,17 @@ Maker                     OTC Escrow Contract                 Taker
 
 ---
 
+### Gateway Responsibilities
+
+![Gateway Flow](./docs/gateway_flow.png)
+
+- **Issue attestations** for encrypted inputs created with the Relayer SDK.
+- **Validate ciphertext equality** (e.g., `amountIn == takerPay`).
+- **Update confidential balances** in ERC-7984 tokens.
+- **Finalize escrow fills** by calling back into the smart contract with `finalizeFill`.
+
+---
+
 ## 🛠 Installation
 
 ```bash
@@ -152,3 +163,4 @@ function revealTerms(uint256 id) external;
 ## 📚 References
 - [Zama FHEVM](https://docs.zama.ai/fhevm)
 - [OpenZeppelin Confidential Contracts](https://docs.openzeppelin.com/confidential-contracts)
+

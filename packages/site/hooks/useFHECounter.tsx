@@ -63,14 +63,15 @@ function getFHECounterByChainId(
   const entry =
     FHECounterAddresses[chainId.toString() as keyof typeof FHECounterAddresses];
 
-  if (!("address" in entry) || entry.address === ethers.ZeroAddress) {
+  // Check if entry exists and has the required properties
+  if (!entry || !("address" in entry) || entry.address === ethers.ZeroAddress) {
     return { abi: FHECounterABI.abi, chainId };
   }
 
   return {
-    address: entry?.address as `0x${string}` | undefined,
-    chainId: entry?.chainId ?? chainId,
-    chainName: entry?.chainName,
+    address: entry.address as `0x${string}`,
+    chainId: entry.chainId ?? chainId,
+    chainName: entry.chainName,
     abi: FHECounterABI.abi,
   };
 }
@@ -429,13 +430,13 @@ export const useFHECounter = (parameters: {
           const tx: ethers.TransactionResponse =
             op === "increment"
               ? await thisFheCounterContract.increment(
-                  enc.handles[0],
-                  enc.inputProof
-                )
+                enc.handles[0],
+                enc.inputProof
+              )
               : await thisFheCounterContract.decrement(
-                  enc.handles[0],
-                  enc.inputProof
-                );
+                enc.handles[0],
+                enc.inputProof
+              );
 
           setMessage(`Wait for tx:${tx.hash}...`);
 
