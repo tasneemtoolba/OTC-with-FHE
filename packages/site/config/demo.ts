@@ -7,6 +7,6 @@ export const DEMO_CONFIG = {
 
     // Note: tokenIn and tokenOut addresses are user inputs
     // These are just examples for the demo
-    tokenIn: "0x0000000000000000000000000000000000000000" as `0x${string}`, // User will input this
-    tokenOut: "0x0000000000000000000000000000000000000000" as `0x${string}`, // User will input this
+    tokenIn: "0x5296968f6443608B719C142cbc4cC413e9B46F09" as `0x${string}`, // User will input this
+    tokenOut: "0x5296968f6443608B719C142cbc4cC413e9B46F09" as `0x${string}`, // User will input this
 };

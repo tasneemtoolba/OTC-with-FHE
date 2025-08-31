@@ -24,9 +24,9 @@ export default function OTCDemo({ otcAddress, gatewayAddress, tokenIn, tokenOut 
         { id: "create", label: "Create Order", icon: "📝" },
         { id: "fill", label: "Fill Order", icon: "✅" },
         { id: "orders", label: "View Orders", icon: "📋" },
-        { id: "audit", label: "Reveal & Audit", icon: "🔍" },
-        { id: "mint", label: "Mint Tokens", icon: "🪙" },
-        { id: "debug", label: "Debug", icon: "🔧" },
+        // { id: "audit", label: "Reveal & Audit", icon: "🔍" },
+        // { id: "mint", label: "Mint Tokens", icon: "🪙" },
+        // { id: "debug", label: "Debug", icon: "🔧" },
     ] as const;
 
     // Check if current network supports FHEVM
@@ -189,25 +189,25 @@ export default function OTCDemo({ otcAddress, gatewayAddress, tokenIn, tokenOut 
                 {activeTab === "orders" && (
                     <Orders />
                 )}
-                {activeTab === "audit" && (
+                {/* {activeTab === "audit" && (
                     <RevealAndAudit
                         otcAddress={otcAddress}
                         onTermsRevealed={onTermsRevealed}
                     />
-                )}
-                {activeTab === "mint" && (
+                )} */}
+                {/* {activeTab === "mint" && (
                     <MintToken
                         contractAddress="0x5296968f6443608B719C142cbc4cC413e9B46F09"
                     />
-                )}
-                {activeTab === "debug" && (
+                )} */}
+                {/* {activeTab === "debug" && (
                     <ContractDebugger
                         otcAddress={otcAddress}
                         gatewayAddress={gatewayAddress}
                         tokenIn={tokenIn}
                         tokenOut={tokenOut}
                     />
-                )}
+                )} */}
             </div>
 
             {/* Footer Note */}
