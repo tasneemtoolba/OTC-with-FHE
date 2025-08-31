@@ -105,10 +105,10 @@ async function getWeb3Client(rpcUrl: string) {
 
 async function tryFetchFHEVMHardhatNodeRelayerMetadata(rpcUrl: string): Promise<
   | {
-      ACLAddress: `0x${string}`;
-      InputVerifierAddress: `0x${string}`;
-      KMSVerifierAddress: `0x${string}`;
-    }
+    ACLAddress: `0x${string}`;
+    InputVerifierAddress: `0x${string}`;
+    KMSVerifierAddress: `0x${string}`;
+  }
   | undefined
 > {
   const version = await getWeb3Client(rpcUrl);

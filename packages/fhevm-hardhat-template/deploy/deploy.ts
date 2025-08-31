@@ -11,6 +11,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
 
   console.log(`FHECounter contract: `, deployedFHECounter.address);
+  
 };
 export default func;
 func.id = "deploy_fheCounter"; // id required to prevent reexecution

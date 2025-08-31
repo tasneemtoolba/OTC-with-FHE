@@ -11,13 +11,13 @@ function _assert(condition: boolean, message?: string): asserts condition {
   }
 }
 
-export type FhevmGoState = "idle" | "loading" | "ready" | "error";
+export type FhevmGoState = "idle" | "loading" | "ready" | "error" | "unsupported";
 
 export function useFhevm(parameters: {
   provider: string | ethers.Eip1193Provider | undefined;
   chainId: number | undefined;
   enabled?: boolean;
-  initialMockChains?: Readonly<Record<number, string>>;  
+  initialMockChains?: Readonly<Record<number, string>>;
 }): {
   instance: FhevmInstance | undefined;
   refresh: () => void;
@@ -115,6 +115,17 @@ export function useFhevm(parameters: {
         "!controllerRef.current.signal.aborted"
       );
 
+      // Check if we're on a supported network
+      const currentChainId = _chainIdRef.current;
+      if (currentChainId !== undefined) {
+        // Check if this is a supported network for FHEVM
+        const supportedNetworks = [11155111, 31337]; // Sepolia, Hardhat
+        if (!supportedNetworks.includes(currentChainId)) {
+          _setStatus("unsupported");
+          _setError(new Error(`Network ${currentChainId} is not supported for FHEVM operations. Please switch to Sepolia testnet or Hardhat local network.`));
+          return;
+        }
+      }
       // Keep old instance
       // Was set to undefined if provider changed
       _setStatus("loading");

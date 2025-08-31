@@ -48,6 +48,27 @@ const config: HardhatUserConfig = {
       chainId: 31337,
       url: "http://localhost:8545",
     },
+    // Base Sepolia (test)
+    baseSepolia: {
+      url: process.env.BASE_SEPOLIA_RPC!,
+      chainId: 84532,
+      accounts: {
+        mnemonic: MNEMONIC,
+        path: "m/44'/60'/0'/0/",
+        count: 10,
+      },
+    },
+
+    // Base mainnet (prod)
+    base: {
+      url: process.env.BASE_RPC!,
+      chainId: 8453,
+      accounts: {
+        mnemonic: MNEMONIC,
+        path: "m/44'/60'/0'/0/",
+        count: 10,
+      },
+    },
     sepolia: {
       accounts: {
         mnemonic: MNEMONIC,
