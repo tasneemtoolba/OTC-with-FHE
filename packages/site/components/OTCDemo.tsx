@@ -25,7 +25,7 @@ export default function OTCDemo({ otcAddress, gatewayAddress, tokenIn, tokenOut 
         { id: "fill", label: "Fill Order", icon: "✅" },
         { id: "orders", label: "View Orders", icon: "📋" },
         // { id: "audit", label: "Reveal & Audit", icon: "🔍" },
-        // { id: "mint", label: "Mint Tokens", icon: "🪙" },
+        { id: "mint", label: "Mint Tokens", icon: "🪙" },
         // { id: "debug", label: "Debug", icon: "🔧" },
     ] as const;
 
@@ -195,11 +195,11 @@ export default function OTCDemo({ otcAddress, gatewayAddress, tokenIn, tokenOut 
                         onTermsRevealed={onTermsRevealed}
                     />
                 )} */}
-                {/* {activeTab === "mint" && (
+                {activeTab === "mint" && (
                     <MintToken
-                        contractAddress="0x5296968f6443608B719C142cbc4cC413e9B46F09"
+                        contractAddress="0xcde70d205f9D467CFA1fC46b45C45a30E651E172"
                     />
-                )} */}
+                )}
                 {/* {activeTab === "debug" && (
                     <ContractDebugger
                         otcAddress={otcAddress}

@@ -5,11 +5,82 @@ import { useFhevm } from "@/fhevm/useFhevm";
 
 // ERC-7984 Mintable Burnable ABI (minimal version for minting)
 const ERC7984_ABI = [
-    "function mint(address to, bytes calldata externalEuint64, bytes calldata inputProof) external",
-    "function balanceOf(address account) external view returns (uint256)",
-    "function name() external view returns (string)",
-    "function symbol() external view returns (string)",
-    "function decimals() external view returns (uint8)"
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "internalType": "uint64",
+                "name": "amount",
+                "type": "uint64"
+            }
+        ],
+        "name": "mint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
 ];
 
 type Props = {
@@ -25,6 +96,7 @@ export default function MintToken({ contractAddress }: Props) {
     });
 
     const [amount, setAmount] = useState<string>("100");
+    const [recipientAddress, setRecipientAddress] = useState<string>("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
@@ -79,19 +151,18 @@ export default function MintToken({ contractAddress }: Props) {
                 throw new Error("Signer address not available");
             }
 
-            // Create encrypted input using FHEVM
-            const encryptedInput = fhevmInstance.createEncryptedInput(contractAddress, ethersSigner.address);
-            encryptedInput.add32(parseInt(amount));
-            const encryptedAmount = await encryptedInput.encrypt();
-
             // Setup contract
             const contract = new ethers.Contract(contractAddress, ERC7984_ABI, ethersSigner);
 
-            // Call mint function
+            // Validate recipient address
+            if (!recipientAddress || !ethers.isAddress(recipientAddress)) {
+                throw new Error("Please enter a valid recipient address");
+            }
+
+            // Call mint function with address and uint64 amount
             const tx = await contract.mint(
-                ethersSigner.address,
-                encryptedAmount.handles[0], // externalEuint64
-                encryptedAmount.inputProof   // inputProof
+                recipientAddress,
+                parseInt(amount)
             );
 
             const receipt = await tx.wait();
@@ -104,6 +175,7 @@ export default function MintToken({ contractAddress }: Props) {
 
             // Reset form
             setAmount("100");
+            setRecipientAddress("");
 
         } catch (err: any) {
             console.error("Failed to mint token:", err);
@@ -189,6 +261,21 @@ export default function MintToken({ contractAddress }: Props) {
 
                 {/* Mint Form */}
                 <form onSubmit={handleMint} className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Recipient Address *
+                        </label>
+                        <input
+                            value={recipientAddress}
+                            onChange={e => setRecipientAddress(e.target.value)}
+                            type="text"
+                            placeholder="0x..."
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Enter the address where you want to mint tokens</p>
+                    </div>
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Amount to Mint (uint64) *
