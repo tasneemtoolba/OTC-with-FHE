@@ -22,6 +22,7 @@ pragma solidity ^0.8.20;
  */
 
 import {FHE, euint64, externalEuint64, eaddress, externalEaddress} from "@fhevm/solidity/lib/FHE.sol";
+import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
 /// Minimal ERC-7984-like interface for confidential tokens.
 /// Replace / remove this interface and import the real OZ interface if available in your project.
@@ -78,7 +79,7 @@ interface IConfidentialOtcEscrow {
 }
 
 /// Implementation
-contract ConfidentialOtcEscrowWithOZ is IConfidentialOtcEscrow {
+contract ConfidentialOtcEscrowWithOZ is IConfidentialOtcEscrow, SepoliaConfig {
     address public gateway; // authorized FHE execution layer / gateway
 
     constructor(address _gateway) {

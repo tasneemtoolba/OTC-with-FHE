@@ -50,7 +50,7 @@ const config: HardhatUserConfig = {
     },
     // Base Sepolia (test)
     baseSepolia: {
-      url: process.env.BASE_SEPOLIA_RPC!,
+      url:"https://sepolia.base.org",
       chainId: 84532,
       accounts: {
         mnemonic: MNEMONIC,
@@ -61,7 +61,7 @@ const config: HardhatUserConfig = {
 
     // Base mainnet (prod)
     base: {
-      url: process.env.BASE_RPC!,
+      url: "https://mainnet.base.org",
       chainId: 8453,
       accounts: {
         mnemonic: MNEMONIC,
@@ -86,7 +86,7 @@ const config: HardhatUserConfig = {
     tests: "./test",
   },
   solidity: {
-    version: "0.8.24",
+    version: "0.8.27",
     settings: {
       metadata: {
         // Not including the metadata hash

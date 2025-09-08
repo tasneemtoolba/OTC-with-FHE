@@ -17,7 +17,7 @@ export default function FillOrder({ otcAddress, onOrderFilled }: Props) {
         enabled: !!provider
     });
     const [orderId, setOrderId] = useState<string>("0");
-    const [payIn, setPayIn] = useState<string>("150000");
+    const [payIn, setPayIn] = useState<string>("100");
     const [doTransferIn, setDoTransferIn] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
@@ -59,7 +59,7 @@ export default function FillOrder({ otcAddress, onOrderFilled }: Props) {
 
             // Reset form
             setOrderId("0");
-            setPayIn("150000");
+            setPayIn("100");
 
         } catch (err: any) {
             console.error("Failed to fill order:", err);
@@ -142,7 +142,7 @@ export default function FillOrder({ otcAddress, onOrderFilled }: Props) {
                             type="number"
                             min="1"
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                            placeholder="150000"
+                            placeholder="100"
                             required
                         />
                         <p className="text-xs text-gray-500 mt-1">Amount you're willing to pay for this order</p>

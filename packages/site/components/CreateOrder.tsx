@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMetaMaskEthersSigner } from "@/hooks/metamask/useMetaMaskEthersSigner";
 import { useFhevm } from "@/fhevm/useFhevm";
+import { ethers } from "ethers";
+import { OTC_ABI } from "@/abi/otc";
 
 type Props = {
     otcAddress: `0x${string}`;
@@ -20,8 +22,8 @@ export default function CreateOrder({ otcAddress, tokenIn, tokenOut, onOrderCrea
     // Form state
     const [userTokenIn, setUserTokenIn] = useState<string>(tokenIn);
     const [userTokenOut, setUserTokenOut] = useState<string>(tokenOut);
-    const [amountIn, setAmountIn] = useState<string>("150000");
-    const [amountOut, setAmountOut] = useState<string>("100000");
+    const [amountIn, setAmountIn] = useState<string>("100");
+    const [amountOut, setAmountOut] = useState<string>("100");
     const [takerAddr, setTakerAddr] = useState<string>("0x0000000000000000000000000000000000000000");
     const [deadline, setDeadline] = useState<number>(Math.floor(Date.now() / 1000) + 86400);
     const [doTransferOut, setDoTransferOut] = useState(true);
@@ -49,14 +51,14 @@ export default function CreateOrder({ otcAddress, tokenIn, tokenOut, onOrderCrea
             }
 
             // Create encrypted input for amountIn
-            // const amountInInput = fhevmInstance.createEncryptedInput(otcAddress, ethersSigner.address);
-            // amountInInput.add32(parseInt(amountIn));
-            // const amountInEnc = await amountInInput.encrypt();
+            const amountInInput = fhevmInstance.createEncryptedInput(otcAddress, ethersSigner.address);
+            amountInInput.add32(parseInt(amountIn));
+            const amountInEnc = await amountInInput.encrypt();
 
             // Create encrypted input for amountOut
-            // const amountOutInput = fhevmInstance.createEncryptedInput(otcAddress, ethersSigner.address);
-            // amountOutInput.add32(parseInt(amountOut));
-            // const amountOutEnc = await amountOutInput.encrypt();
+            const amountOutInput = fhevmInstance.createEncryptedInput(otcAddress, ethersSigner.address);
+            amountOutInput.add32(parseInt(amountOut));
+            const amountOutEnc = await amountOutInput.encrypt();
 
             // For taker address, we'll use a simple approach - you may need to adapt this
             const takerInput = fhevmInstance.createEncryptedInput(otcAddress, ethersSigner.address);
@@ -65,21 +67,21 @@ export default function CreateOrder({ otcAddress, tokenIn, tokenOut, onOrderCrea
             const takerEnc = await takerInput.encrypt();
 
             // 2) call createOrder
-            // const contract = new ethers.Contract(otcAddress, OTC_ABI, ethersSigner);
-            // const tx = await contract.createOrder(
-            //     userTokenIn,
-            //     userTokenOut,
-            //     amountInEnc.handles[0], // amountInExt (bytes)
-            //     amountOutEnc.handles[0], // amountOutExt (bytes)
-            //     takerEnc.handles[0], // maybeTakerExt (bytes)
-            //     amountInEnc.inputProof, // attestation
-            //     BigInt(deadline),
-            //     doTransferOut
-            // );
+            const contract = new ethers.Contract(otcAddress, OTC_ABI, ethersSigner);
+            const tx = await contract.createOrder(
+                userTokenIn,
+                userTokenOut,
+                amountInEnc.handles[0], // amountInExt (bytes)
+                amountOutEnc.handles[0], // amountOutExt (bytes)
+                takerEnc.handles[0], // maybeTakerExt (bytes)
+                amountInEnc.inputProof, // attestation
+                BigInt(deadline),
+                doTransferOut
+            );
 
-            // const receipt = await tx.wait();
-            // console.log("Order created with tx hash:", receipt.hash);
-            // onOrderCreated?.(receipt.hash);
+            const receipt = await tx.wait();
+            console.log("Order created with tx hash:", receipt.hash);
+            onOrderCreated?.(receipt.hash);
 
             // Keep loading state until user signs
             // Don't show any success message yet
@@ -101,8 +103,8 @@ export default function CreateOrder({ otcAddress, tokenIn, tokenOut, onOrderCrea
             }
 
             // Reset form
-            setAmountIn("150000");
-            setAmountOut("100000");
+            setAmountIn("100");
+            setAmountOut("100");
             setTakerAddr("0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69");
             setDeadline(Math.floor(Date.now() / 1000) + 86400);
 
@@ -120,8 +122,8 @@ export default function CreateOrder({ otcAddress, tokenIn, tokenOut, onOrderCrea
             }
 
             // Reset form
-            setAmountIn("150000");
-            setAmountOut("100000");
+            setAmountIn("100");
+            setAmountOut("100");
             setTakerAddr("0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69");
             setDeadline(Math.floor(Date.now() / 1000) + 86400);
         } finally {

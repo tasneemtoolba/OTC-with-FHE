@@ -1,25 +1,19 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
-
-import {FHE, externalEuint64, ebool, euint64} from "@fhevm/solidity/lib/FHE.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {ERC7984} from "https://github.com/OpenZeppelin/openzeppelin-confidential-contracts/blob/master/contracts/token/ERC7984/ERC7984.sol";
-
-contract ERC7984MintableBurnable is ERC7984, Ownable {
-    using FHE for *;
-
-    constructor(
-        address owner,
-        string memory name,
-        string memory symbol,
-        string memory uri
-    ) ERC7984(name, symbol, uri) Ownable(owner) {}
-
-    function mint(address to, externalEuint64 amount, bytes memory inputProof) public onlyOwner {
-        _mint(to, amount.fromExternal(inputProof));
-    }
-
-    function burn(address from, externalEuint64 amount, bytes memory inputProof) public onlyOwner {
-        _burn(from, amount.fromExternal(inputProof));
-    }
-}
+ // SPDX-License-Identifier: BSD-3-Clause-Clear
+ pragma solidity ^0.8.27;
+ 
+ import {Ownable2Step, Ownable} from "@openzeppelin/contracts/access/Ownable2Step.sol";
+ import {FHE, externalEuint64, euint64} from "@fhevm/solidity/lib/FHE.sol";
+ import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
+ import {ConfidentialFungibleToken} from "@openzeppelin/confidential-contracts/token/ConfidentialFungibleToken.sol";
+ 
+ contract ConfidentialTokenExample is SepoliaConfig, ConfidentialFungibleToken, Ownable2Step {
+     constructor(
+         uint64 amount,
+         string memory name_,
+         string memory symbol_,
+         string memory tokenURI_
+     ) ConfidentialFungibleToken(name_, symbol_, tokenURI_) Ownable(msg.sender) {
+         euint64 encryptedAmount = FHE.asEuint64(amount);
+         _mint(msg.sender, encryptedAmount);
+     }
+ }
