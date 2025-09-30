@@ -1,6 +1,6 @@
 export const DEMO_CONFIG = {
     // OTC Escrow Contract
-    otcAddress: "0x4fDa2d33D10338195680c32A69A809AD6942e151" as `0x${string}`,
+    otcAddress: "0x070935d23586bb29220373CC907F42C836822BbF" as `0x${string}`,
 
     // Gateway Address
     gatewayAddress: "0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69" as `0x${string}`,
