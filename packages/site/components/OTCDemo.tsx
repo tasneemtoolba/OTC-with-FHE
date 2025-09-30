@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateOrder from "./CreateOrder";
 import { Orders } from "./Orders";
 import { RevealAndAudit } from "./RevealAndAudit";
@@ -19,6 +19,20 @@ export default function OTCDemo({ otcAddress, gatewayAddress, tokenIn, tokenOut 
     const [activeTab, setActiveTab] = useState<"create" | "orders" | "audit" | "debug">("create");
     const { orders, onOrderCreated, onOrderFilled, onTermsRevealed } = useOrderEvents();
     const { chainId, isConnected, connect } = useMetaMaskEthersSigner();
+
+    // Prevent background scrolling when orders modal is open
+    useEffect(() => {
+        if (activeTab === "orders") {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+
+        // Cleanup on unmount
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [activeTab]);
 
     const tabs = [
         { id: "create", label: "Create Order", icon: "📝" },
@@ -96,7 +110,7 @@ export default function OTCDemo({ otcAddress, gatewayAddress, tokenIn, tokenOut 
                                         <code className="text-gray-900 font-mono">{tokenOut === "0x0000000000000000000000000000000000000000" ? "Custom" : tokenOut.slice(0, 6) + "..." + tokenOut.slice(-4)}</code>
                                     </div>
                                 </div>
-                                
+
                                 {/* View All Orders Button */}
                                 <div className="mt-4 pt-4 border-t border-gray-200">
                                     <button
@@ -140,7 +154,7 @@ export default function OTCDemo({ otcAddress, gatewayAddress, tokenIn, tokenOut 
                                     ✕ Close
                                 </button>
                             </div>
-                            
+
                             {/* Modal Content */}
                             <div className="flex-1 overflow-y-auto p-6">
                                 <Orders otcAddress={otcAddress} />
