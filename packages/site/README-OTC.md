@@ -17,9 +17,9 @@ A demonstration frontend for confidential over-the-counter (OTC) trading using *
 ### Smart Contract
 
 - **Contract**: `ConfidentialOtcEscrow.sol`
-- **Address**: `0x7A333C2F8756F8fe7F341D1f590FC1A32199F4AD`
+- **Address**: `0x070935d23586bb29220373CC907F42C836822BbF`
 - **Gateway**: `0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69`
-- **TokenAddress**: `0x5296968f6443608B719C142cbc4cC413e9B46F09`
+- **TokenAddress**: `0xcde70d205f9D467CFA1fC46b45C45a30E651E172`
 ### Frontend Components
 
 - **CreateOrder**: Form for makers to create new OTC orders
@@ -52,7 +52,7 @@ Edit `config/demo.ts` to use your deployed contract addresses:
 
 ```typescript
 export const DEMO_CONFIG = {
-  otcAddress: "0x7A333C2F8756F8fe7F341D1f590FC1A32199F4AD",
+  otcAddress: "0x070935d23586bb29220373CC907F42C836822BbF",
   gatewayAddress: "0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69",
   // Token addresses are user inputs
   tokenIn: "0x0000000000000000000000000000000000000000",
@@ -151,7 +151,7 @@ npm run dev
 
 ```bash
 # Add to .env.local if needed
-NEXT_PUBLIC_OTC_ADDRESS=0x7A333C2F8756F8fe7F341D1f590FC1A32199F4AD
+NEXT_PUBLIC_OTC_ADDRESS=0x070935d23586bb29220373CC907F42C836822BbF
 NEXT_PUBLIC_GATEWAY_ADDRESS=0xB60CeC27c4E86dEbaE055dE850E57CDfc94a2D69
 ```
 

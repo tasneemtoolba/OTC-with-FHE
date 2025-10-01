@@ -40,7 +40,7 @@ export default function ContractDebugger({ otcAddress, gatewayAddress, tokenIn, 
         setResult("");
 
         try {
-            const tokenAddress = "0x5296968f6443608B719C142cbc4cC413e9B46F09";
+            const tokenAddress = "0xcde70d205f9D467CFA1fC46b45C45a30E651E172";
             const contract = new ethers.Contract(tokenAddress, BASIC_ABI, ethersSigner);
 
             const [name, symbol, decimals, owner, totalSupply] = await Promise.all([
@@ -113,7 +113,7 @@ OTC Contract: ${otcAddress}
 Gateway: ${gatewayAddress}
 Token In: ${tokenIn === "0x0000000000000000000000000000000000000000" ? "User Input" : tokenIn}
 Token Out: ${tokenOut === "0x0000000000000000000000000000000000000000" ? "User Input" : tokenOut}
-Token Contract: 0x5296968f6443608B719C142cbc4cC413e9B46F09
+Token Contract: 0xcde70d205f9D467CFA1fC46b45C45a30E651E172
             `);
         } catch (err: any) {
             setError("Failed to display contract addresses");
